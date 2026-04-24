@@ -25,6 +25,8 @@ const router = Router();
 
 router.post("/",authMiddleware, upload.single('image'), noteController.createNote);
 router.get("/", authMiddleware, noteController.getNotesByUserId);
-
+router.get("/:id", authMiddleware, noteController.getByIdNote);
+router.put("/:id", authMiddleware, upload.single('image'), noteController.updateNote);
+router.delete("/:id", authMiddleware, roleMiddleware(['admin']), noteController.deleteNote);
 
 export default router;

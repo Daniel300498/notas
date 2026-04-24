@@ -7,7 +7,7 @@ const noteModel = sequelize.define('Note',{
     imageUrl: {type: DataTypes.STRING},
     isPrivate: {type: DataTypes.BOOLEAN, defaultValue: false},
     password: {type: DataTypes.STRING},
-    userid: {type: DataTypes.STRING, allowNull: false}
+    userId: {type: DataTypes.STRING, allowNull: false}
 }, {
     timestamps: true
 });

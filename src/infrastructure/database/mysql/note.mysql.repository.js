@@ -7,11 +7,11 @@ export default class NoteMySQLRepository {
             imageUrl: noteEntity.imageUrl,
             isPrivate: noteEntity.isPrivate,
             password: noteEntity.password,
-            userid: noteEntity.userid
+            userId: noteEntity.userId
         });
         return note.toJSON();
     }
-    async findByUserId(userid){
-        return await NoteModel.findAll({where: {userid}});
+    async findByUserId(userId){
+        return await NoteModel.findAll({where: {userId}});
     }
 }

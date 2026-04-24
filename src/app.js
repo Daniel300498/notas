@@ -29,13 +29,11 @@ app.get('/api/health', (req, res) => {
 });
  
  
- 
- 
-//midleware de manejo de errores global
- 
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Error interno del servidor' });
+
+app.use((error, req, res, next) => {
+    console.error(error);
+     res.status(500).json({ error: error.message });
+   // res.status(500).json({ error: 'Error interno del servidor' });
 });
  
 const PORT = process.env.PORT || 3000;
