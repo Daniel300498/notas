@@ -10,7 +10,7 @@ import { connectMongo } from './infrastructure/database/mongo/connection.js';
 import { connectMysql } from './infrastructure/database/mysql/connection.js';
  
 await connectMongo();
-//await connectMysql();
+await connectMysql();
  
 const app = express();
  
@@ -32,8 +32,8 @@ app.get('/api/health', (req, res) => {
 
 app.use((error, req, res, next) => {
     console.error(error);
-     res.status(500).json({ error: error.message });
-   // res.status(500).json({ error: 'Error interno del servidor' });
+     //res.status(500).json({ error: error.message });
+   res.status(500).json({ error: 'Error interno del servidor' });
 });
  
 const PORT = process.env.PORT || 3000;

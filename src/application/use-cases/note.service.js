@@ -33,4 +33,13 @@ export default class NoteService {
         if(!note) throw new Error("Nota no se pudo eliminar");
         return {message: "Nota Eliminada Satisfatoriamente"};
     }
+    async shareNoteByEmail(noteId, targetEmail, currentUserId) {
+        const note = await this.noteRepository.findById(noteId);
+        if (!note) throw new Error("Note not found");  
+        if (note.userId !== currentUserId) {
+            throw new Error("Unauthorized: You can only share your own notes");
+        }
+
+        return await this.mailService.sendNoteEmail(targetEmail, note);
+    }
 }
