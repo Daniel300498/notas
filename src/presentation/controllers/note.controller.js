@@ -21,7 +21,7 @@ export default class NoteController {
             const notes = await this.noteService.getNotesByUserId(userId);
             res.status(200).json(notes); // 200 OK
         } catch (error) {
-            res.status(404).json({ error: error.message });
+            res.status(500).json({ error: error.message });
         }
     }
     getByIdNote = async (req, res) => {
@@ -30,7 +30,7 @@ export default class NoteController {
             const userId = req.user.id;
             const note = await this.noteService.getByIdNote(id, userId);
             if (!note) {
-                return res.status(404).json({ error: 'Nota no encontrada o inexistente' });
+                return res.status(404).json({ error: 'Note not found or non-existent' });
             }
             res.status(200).json(note);
         } catch (error) {
@@ -45,11 +45,11 @@ export default class NoteController {
         try {
             const note = await this.noteService.getByIdNote(id);
             if (!note) {
-                return res.status(404).json({ error: "Nota no encontrada o inexistente" });
+                return res.status(404).json({ error: "Note not found or non-existent" });
             }
     
             if (user.role !== "admin" && note.userId.toString() !== user.id) {
-                return res.status(403).json({ error: "No puedes modificar, la nota no te pertenece" });
+                return res.status(403).json({ error: "You can't delete it; the note doesn't belong to you." });
             }
             const updatedNote = await this.noteService.updateNote(id, data);
             res.status(200).json(updatedNote);
@@ -64,13 +64,14 @@ export default class NoteController {
             try{
                 const note =await this.noteService.getByIdNote(id);
                 if(!note){
-                    return res.status(404).json({ error: "Nota no encontrada o inexistente"});
+                    return res.status(404).json({ error: "Note not found or non-existent"});
                 }
                 if (user.role !== "admin" && note.userId.toString() !== user.id) {
-                    return res.status(403).json({ error: "No puedes eliminar, la nota no te pertenece" });
+                    return res.status(403).json({ error: "You can't delete it; the note doesn't belong to you." });
                 }
-                const result = await  this.noteService.deleteNote(id);
-                res.status(200).json(result);
+                
+                await  this.noteService.deleteNote(id);
+                return res.status(204).send();
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -79,14 +80,18 @@ export default class NoteController {
         const { id } = req.params;
         const { email } = req.body;
         const currentUserId = req.user.id;
-
+        
         if (!email) return res.status(400).json({ error: "Target email is required" });
 
         try {
+            const note = await this.noteService.getByIdNote(id, currentUserId);
+            if(!note){
+                return res.status(404).json({error: "Note not found"});
+            }
             const result = await this.noteService.shareNoteByEmail(id, email, currentUserId);
             res.status(200).json(result);
         } catch (error) {
-            res.status(400).json({ error: error.message });
+            res.status(500).json({ error: error.message });
         }
     }
 }
