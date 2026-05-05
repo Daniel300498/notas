@@ -23,7 +23,7 @@ const options = {
         },
         security: [{ bearerAuth: [] }] 
     },
-    // Le decimos a Swagger dónde buscar los comentarios para generar la documentación
+    
     apis: ['./src/presentation/routes/*.js'], 
 };
 

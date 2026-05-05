@@ -67,6 +67,27 @@ router.get("/", authMiddleware, noteController.getNotesByUserId);
 
 /**
  * @swagger
+ * /notes/{id}/public:
+ *   get:
+ *     summary: Obtener una nota pública sin autenticación
+ *     tags: [Notes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Nota pública encontrada
+ *       403:
+ *         description: La nota es privada
+ *       404:
+ *         description: Nota no encontrada
+ */
+router.get("/:id/public", noteController.getPublicNote);
+/**
+ * @swagger
  * /notes/{id}:
  *   get:
  *     summary: Obtener una nota por ID
